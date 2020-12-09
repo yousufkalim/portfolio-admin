@@ -1,0 +1,20 @@
+/* Input file custom text */
+.file-custom:after {
+	content: "Choose a featured image...";
+	font-size: 18px;
+	font-family: "Source Sans Pro", sans-serif;
+	color: #555c6e;
+	font-weight: normal;
+}
+
+/* Editor */
+
+.post form .post-editor {
+	margin: 10px 0;
+	width: 100%;
+}
+
+.ck-editor .ck-content {
+	min-height: 300px;
+	font-family: "Source Sans Pro", sans-serif;
+}

@@ -1,0 +1,36 @@
+/* Main */
+nav {
+	display: flex;
+	justify-content: space-between;
+	padding: 28px 50px 6px 70px;
+	position: fixed;
+	top: 0;
+	z-index: 5;
+	width: 100%;
+}
+
+/* Link */
+.logo-container a {
+	width: 232px;
+	height: 56px;
+	text-decoration: none;
+}
+
+/* Logo */
+.logo-container a span {
+	width: 232px;
+	height: 56px;
+	font-family: "Ubuntu", sans-serif;
+	font-weight: 300;
+	font-size: 30px;
+	color: white;
+	line-height: 56px;
+	display: inline-block;
+}
+
+/* Logout */
+.logout a {
+	text-decoration: none;
+	color: #fa225a;
+	font-size: 1.2rem;
+}
