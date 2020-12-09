@@ -138,7 +138,7 @@ Global Form Style
 }
 
 /* Button */
-button {
+button:not(.close) {
 	height: 60px;
 	width: 100%;
 	border: none;
@@ -156,7 +156,7 @@ button {
 	transition: all 0.3s;
 }
 
-button:hover {
+button:not(.close):hover {
 	background-color: white;
 	color: #fa225a;
 	cursor: pointer;

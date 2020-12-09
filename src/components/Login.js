@@ -1,5 +1,5 @@
+// Init
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 //Style
@@ -10,7 +10,6 @@ function Login() {
 	//Initializing States
 	let [login, setLogin] = useState({ email: "", password: "" });
 	let [err, setErr] = useState("");
-	let history = useHistory();
 
 	//Handle Input
 	const handleInput = (e) => {
@@ -28,20 +27,28 @@ function Login() {
 
 		axios
 			.post("/login", login)
-			.then((res) => {
-				if (res.status === 200) {
-					history.push("/");
-				} else {
-					setErr("Email or Password is incorrect");
-				}
+			.then(() => {
+				window.location = "/";
 			})
-			.catch((err) => err);
+			.catch(() => setErr("Email or password is incorrect"));
 	};
 
 	return (
 		<div className="form-container">
 			<form onSubmit={handleSubmit} style={{ width: "25%" }}>
 				<h2>Login</h2>
+				{err ? (
+					<div className="alert">
+						<button
+							type="button"
+							className="close"
+							onClick={() => setErr("")}
+						>
+							&times;
+						</button>
+						<strong>{err}</strong>
+					</div>
+				) : null}
 				<input
 					type="email"
 					name="email"

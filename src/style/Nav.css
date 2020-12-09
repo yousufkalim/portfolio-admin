@@ -29,8 +29,8 @@ nav {
 }
 
 /* Logout */
-.logout a {
-	text-decoration: none;
+.logout-icon {
+	cursor: pointer;
 	color: #fa225a;
 	font-size: 1.2rem;
 }
