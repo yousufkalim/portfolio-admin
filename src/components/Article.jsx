@@ -1,6 +1,7 @@
 //Init
 import React, { useState } from "react";
-import axios from "axios";
+import { storage, db } from "../firebase";
+import MyUploadAdapter from "./MyUploadAdapter";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
@@ -23,12 +24,26 @@ function Article() {
 
 	//Handle Image Input
 	const handleImage = (e) => {
-		setBlog((prev) => {
-			return {
-				...prev,
-				image: e.target.files[0],
-			};
-		});
+		// Firbase upload
+		const image = e.target.files[0];
+		const name = Date.now() + "-" + image.name;
+		const uploadTask = storage.ref(`images/${name}`).put(image);
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {},
+			(error) => console.log(error),
+			() => {
+				uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+					console.log(url);
+					setBlog((prev) => {
+						return {
+							...prev,
+							image: url,
+						};
+					});
+				});
+			}
+		);
 	};
 
 	// Handle Text Input
@@ -44,14 +59,17 @@ function Article() {
 	// Handle Submit
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const formData = new FormData();
 
-		for (const property in blog) {
-			formData.append(property, blog[property]);
-		}
+		const link = "/blog/" + blog.title.split(" ").join("-").toLowerCase();
 
-		axios
-			.post("/blog", formData)
+		db.collection("articles")
+			.add({
+				link: link,
+				image: blog.image,
+				title: blog.title,
+				description: blog.description,
+				blog: blog.blog,
+			})
 			.then(() => {
 				setSubmit(
 					<span className="success">
@@ -113,14 +131,15 @@ function Article() {
 					{/* Ck Editor */}
 					<div className="post-editor">
 						<CKEditor
-							config={{
-								ckfinder: {
-									// Upload the images to the server using the CKFinder QuickUpload command.
-									uploadUrl: "/blog/article-image",
-								},
-							}}
 							editor={ClassicEditor}
 							data={blog.blog}
+							onReady={(editor) => {
+								editor.plugins.get(
+									"FileRepository"
+								).createUploadAdapter = (loader) => {
+									return new MyUploadAdapter(loader);
+								};
+							}}
 							onChange={(event, editor) => {
 								const data = editor.getData();
 								setBlog((prev) => {

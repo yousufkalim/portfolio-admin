@@ -31,7 +31,7 @@ function App() {
 	let { pathname } = useLocation();
 
 	// Global Setting for axios
-	axios.defaults.withCredentials = true;
+	// axios.defaults.withCredentials = true;
 
 	// Checking is user Authenticated or not
 	useEffect(() => {

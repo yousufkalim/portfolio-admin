@@ -56,6 +56,7 @@ function Login() {
 					value={Login.email}
 					onChange={handleInput}
 					required
+					autoFocus
 				/>
 				<input
 					type="password"
