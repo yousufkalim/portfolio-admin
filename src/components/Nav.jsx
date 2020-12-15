@@ -25,7 +25,7 @@ function Nav() {
 				</Link>
 			</div>
 			<div className="logout" onClick={handleLogout}>
-				<i class="logout-icon fas fa-power-off"></i>
+				<i className="logout-icon fas fa-power-off"></i>
 			</div>
 		</nav>
 	);

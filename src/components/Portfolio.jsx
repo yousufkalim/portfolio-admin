@@ -1,6 +1,10 @@
+//Init
 import React, { useState } from "react";
-import axios from "axios";
 
+// Controller
+import { handleInput, handleSubmit } from "../controllers/portfolio";
+
+// Style
 import Nav from "./Nav";
 
 //Style
@@ -21,59 +25,9 @@ function Portfolio() {
 	});
 	let [submit, setSubmit] = useState("");
 
-	//Handle Input
-	const handleInput = (e) => {
-		setPortfolio((prev) => {
-			if (e.target.name === "thumbnail" || e.target.name === "cover") {
-				return {
-					...prev,
-					[e.target.name]: e.target.files[0],
-				};
-			} else {
-				return {
-					...prev,
-					[e.target.name]: e.target.value,
-				};
-			}
-		});
-	};
-
-	//Handle Submit
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		const formData = new FormData();
-
-		for (const property in portfolio) {
-			formData.append(property, portfolio[property]);
-		}
-
-		axios
-			.post("/portfolio", formData)
-			.then(() => {
-				setSubmit(
-					<span className="success">
-						Portfolio added successfully...
-					</span>
-				);
-				setPortfolio({
-					title: "",
-					heading: "",
-					thumbnail: "",
-					cover: "",
-					skills: "",
-					category: "",
-					copyright: "",
-					weburl: "",
-					description: "",
-				});
-			})
-			.catch(() => {
-				setSubmit(
-					<span className="error">Opps an error accured...</span>
-				);
-			});
-	};
+	// Image Progress States
+	let [thumbnailProgress, setThumbnailProgress] = useState(0);
+	let [coverProgress, setCoverProgress] = useState(0);
 
 	//Rendering Component
 	return (
@@ -83,14 +37,25 @@ function Portfolio() {
 
 			{/* Portfolio Form */}
 			<div className="form-container portfolio">
-				<form onSubmit={handleSubmit}>
+				<form
+					onSubmit={(e) =>
+						handleSubmit(
+							e,
+							portfolio,
+							setPortfolio,
+							setSubmit,
+							setThumbnailProgress,
+							setCoverProgress
+						)
+					}
+				>
 					<h2>Add New Portfolio</h2>
 					<input
 						type="text"
 						name="title"
 						placeholder="Title"
 						value={portfolio.title}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
 					<input
@@ -98,37 +63,50 @@ function Portfolio() {
 						name="heading"
 						placeholder="Heading"
 						value={portfolio.heading}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
-					<label class="file portal-thumbnail">
+					<label className="file portal-thumbnail">
 						<input
 							type="file"
 							id="file"
 							name="thumbnail"
 							aria-label="File browser example"
-							onChange={handleInput}
+							onChange={(e) =>
+								handleInput(
+									e,
+									setPortfolio,
+									setThumbnailProgress
+								)
+							}
 							required
 						/>
 						<span class="file-custom"></span>
+						<progress
+							value={thumbnailProgress}
+							max="100"
+						></progress>
 					</label>
-					<label class="file portal-cover">
+					<label className="file portal-cover">
 						<input
 							type="file"
 							id="file"
 							name="cover"
 							aria-label="File browser example"
-							onChange={handleInput}
+							onChange={(e) =>
+								handleInput(e, setPortfolio, setCoverProgress)
+							}
 							required
 						/>
 						<span class="file-custom"></span>
+						<progress value={coverProgress}></progress>
 					</label>
 					<input
 						type="text"
 						name="skills"
 						placeholder="Skills"
 						value={portfolio.skills}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
 					<input
@@ -136,7 +114,7 @@ function Portfolio() {
 						name="category"
 						placeholder="Category"
 						value={portfolio.category}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
 					<input
@@ -144,7 +122,7 @@ function Portfolio() {
 						name="copyright"
 						placeholder="Copyright"
 						value={portfolio.copyright}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
 					<input
@@ -152,7 +130,7 @@ function Portfolio() {
 						name="weburl"
 						placeholder="Website URL"
 						value={portfolio.weburl}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
 					<textarea
@@ -160,7 +138,7 @@ function Portfolio() {
 						cols="30"
 						rows="6"
 						placeholder="Description"
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 						value={portfolio.description}
 					></textarea>

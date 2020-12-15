@@ -1,9 +1,11 @@
 //Init
 import React, { useState } from "react";
-import { storage, db } from "../firebase";
-import MyUploadAdapter from "./MyUploadAdapter";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+//Controllers
+import { handleImage, handleInput, handleSubmit } from "../controllers/article";
+import MyUploadAdapter from "../controllers/MyUploadAdapter";
 
 //Nav
 import Nav from "./Nav";
@@ -22,73 +24,8 @@ function Article() {
 	});
 	let [submit, setSubmit] = useState("");
 
-	//Handle Image Input
-	const handleImage = (e) => {
-		// Firbase upload
-		const image = e.target.files[0];
-		const name = Date.now() + "-" + image.name;
-		const uploadTask = storage.ref(`images/${name}`).put(image);
-		uploadTask.on(
-			"state_changed",
-			(snapshot) => {},
-			(error) => console.log(error),
-			() => {
-				uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-					console.log(url);
-					setBlog((prev) => {
-						return {
-							...prev,
-							image: url,
-						};
-					});
-				});
-			}
-		);
-	};
-
-	// Handle Text Input
-	const handleInput = (e) => {
-		setBlog((prev) => {
-			return {
-				...prev,
-				[e.target.name]: e.target.value,
-			};
-		});
-	};
-
-	// Handle Submit
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		const link = "/blog/" + blog.title.split(" ").join("-").toLowerCase();
-
-		db.collection("articles")
-			.add({
-				link: link,
-				image: blog.image,
-				title: blog.title,
-				description: blog.description,
-				blog: blog.blog,
-			})
-			.then(() => {
-				setSubmit(
-					<span className="success">
-						Article posted successfully...
-					</span>
-				);
-				setBlog({
-					image: "",
-					title: "",
-					description: "",
-					blog: "",
-				});
-			})
-			.catch(() => {
-				setSubmit(
-					<span className="error">Opps an error accured...</span>
-				);
-			});
-	};
+	// Image Upload Progress State
+	let [progress, setProgress] = useState(0);
 
 	// Return Component
 	return (
@@ -98,17 +35,22 @@ function Article() {
 
 			{/* Post Form */}
 			<div className="form-container post">
-				<form onSubmit={handleSubmit}>
+				<form
+					onSubmit={(e) => handleSubmit(e, blog, setBlog, setSubmit)}
+				>
 					<h2>Add New Post</h2>
-					<label class="file">
+					<label className="file">
 						<input
 							type="file"
 							id="file"
 							aria-label="File browser example"
-							onChange={handleImage}
+							onChange={(e) =>
+								handleImage(e, setBlog, setProgress)
+							}
 							required
 						/>
 						<span class="file-custom"></span>
+						<progress value={progress} max="100"></progress>
 					</label>
 					<input
 						type="text"
@@ -116,7 +58,7 @@ function Article() {
 						name="title"
 						placeholder="Title"
 						value={blog.title}
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setBlog)}
 						required
 					/>
 					<textarea
@@ -124,7 +66,7 @@ function Article() {
 						cols="30"
 						rows="3"
 						placeholder="Description"
-						onChange={handleInput}
+						onChange={(e) => handleInput(e, setBlog)}
 						value={blog.description}
 					></textarea>
 
