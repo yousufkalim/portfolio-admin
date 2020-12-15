@@ -1,6 +1,6 @@
 // Init
 import React, { useState } from "react";
-import axios from "axios";
+import { handleInput, handleSubmit } from "../controllers/login";
 
 //Component
 function Login() {
@@ -8,31 +8,13 @@ function Login() {
 	let [login, setLogin] = useState({ email: "", password: "" });
 	let [err, setErr] = useState("");
 
-	//Handle Input
-	const handleInput = (e) => {
-		setLogin((prev) => {
-			return {
-				...prev,
-				[e.target.name]: e.target.value,
-			};
-		});
-	};
-
-	//Handle Submit
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		axios
-			.post("/login", login)
-			.then(() => {
-				window.location = "/";
-			})
-			.catch(() => setErr("Email or password is incorrect"));
-	};
-
+	// Component Render
 	return (
 		<div className="form-container">
-			<form onSubmit={handleSubmit} style={{ width: "25%" }}>
+			<form
+				onSubmit={(e) => handleSubmit(e, login, setErr)}
+				style={{ width: "25%" }}
+			>
 				<h2>Login</h2>
 				{err ? (
 					<div className="alert error">
@@ -51,7 +33,7 @@ function Login() {
 					name="email"
 					placeholder="Email"
 					value={Login.email}
-					onChange={handleInput}
+					onChange={(e) => handleInput(e, setLogin)}
 					required
 					autoFocus
 				/>
@@ -60,7 +42,7 @@ function Login() {
 					name="password"
 					placeholder="Password"
 					value={Login.password}
-					onChange={handleInput}
+					onChange={(e) => handleInput(e, setLogin)}
 					required
 				/>
 				<button type="submit">Login</button>

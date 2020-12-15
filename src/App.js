@@ -7,7 +7,9 @@ import {
 	useHistory,
 	useLocation,
 } from "react-router-dom";
-import axios from "axios";
+
+// Firebase
+import { auth } from "./firebase";
 
 //Components
 import Portal from "./components/Portal";
@@ -30,13 +32,10 @@ function App() {
 	// Gettinf pathname to track authentication
 	let { pathname } = useLocation();
 
-	// Global Setting for axios
-	// axios.defaults.withCredentials = true;
-
 	// Checking is user Authenticated or not
 	useEffect(() => {
-		axios.get("/checkAuth").then((res) => {
-			if (res.data.success) {
+		auth.onAuthStateChanged((user) => {
+			if (user) {
 				setLoggedIn(true);
 			} else {
 				setLoggedIn(false);

@@ -1,4 +1,4 @@
-import firebase from "../firebase";
+import { storage } from "../firebase";
 
 class MyUploadAdapter {
 	constructor(loader) {
@@ -9,8 +9,8 @@ class MyUploadAdapter {
 		return this.loader.file.then(
 			(file) =>
 				new Promise((resolve, reject) => {
-					let storage = firebase.storage().ref(`blog/articles`);
 					let uploadTask = storage
+						.ref(`blog/articles`)
 						.child(Date.now() + "-" + file.name)
 						.put(file);
 					uploadTask.on(
@@ -22,14 +22,6 @@ class MyUploadAdapter {
 									snapshot.totalBytes) *
 								100;
 							console.log("Upload is " + progress + "% done");
-							switch (snapshot.state) {
-								case firebase.storage.TaskState.PAUSED: // or 'paused'
-									console.log("Upload is paused");
-									break;
-								case firebase.storage.TaskState.RUNNING: // or 'running'
-									console.log("Upload is running");
-									break;
-							}
 						},
 						function (error) {
 							// A full list of error codes is available at
