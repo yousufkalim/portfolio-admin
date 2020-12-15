@@ -2,9 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-//Style
-import "../style/Login.css";
-
 //Component
 function Login() {
 	//Initializing States
@@ -38,7 +35,7 @@ function Login() {
 			<form onSubmit={handleSubmit} style={{ width: "25%" }}>
 				<h2>Login</h2>
 				{err ? (
-					<div className="alert">
+					<div className="alert error">
 						<button
 							type="button"
 							className="close"

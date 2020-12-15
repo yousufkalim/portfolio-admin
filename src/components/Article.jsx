@@ -22,7 +22,7 @@ function Article() {
 		description: "",
 		blog: "",
 	});
-	let [submit, setSubmit] = useState("");
+	let [alert, setAlert] = useState(null);
 
 	// Image Upload Progress State
 	let [progress, setProgress] = useState(0);
@@ -36,9 +36,27 @@ function Article() {
 			{/* Post Form */}
 			<div className="form-container post">
 				<form
-					onSubmit={(e) => handleSubmit(e, blog, setBlog, setSubmit)}
+					onSubmit={(e) =>
+						handleSubmit(e, blog, setBlog, setProgress, setAlert)
+					}
 				>
 					<h2>Add New Post</h2>
+					{alert ? (
+						<div
+							className={`alert ${
+								alert.status ? "success" : "error"
+							}`}
+						>
+							<button
+								type="button"
+								className="close"
+								onClick={() => setAlert("")}
+							>
+								&times;
+							</button>
+							<strong>{alert.alert}</strong>
+						</div>
+					) : null}
 					<label className="file">
 						<input
 							type="file"
@@ -94,7 +112,7 @@ function Article() {
 						/>
 					</div>
 
-					{submit ? submit : <button type="submit">Publish</button>}
+					<button type="submit">Publish</button>
 				</form>
 			</div>
 		</>

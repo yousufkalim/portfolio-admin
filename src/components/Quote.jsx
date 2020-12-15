@@ -10,7 +10,7 @@ import Nav from "./Nav";
 function Quote() {
 	//Initializing State
 	let [quote, setQuote] = useState({ quote: "", author: "" });
-	let [submit, setSubmit] = useState("");
+	let [alert, setAlert] = useState(null);
 
 	//Rendering Component
 	return (
@@ -19,11 +19,25 @@ function Quote() {
 
 			<div className="form-container quote">
 				<form
-					onSubmit={(e) =>
-						handleSubmit(e, quote, setQuote, setSubmit)
-					}
+					onSubmit={(e) => handleSubmit(e, quote, setQuote, setAlert)}
 				>
 					<h2>Add New Quote</h2>
+					{alert ? (
+						<div
+							className={`alert ${
+								alert.status ? "success" : "error"
+							}`}
+						>
+							<button
+								type="button"
+								className="close"
+								onClick={() => setAlert("")}
+							>
+								&times;
+							</button>
+							<strong>{alert.alert}</strong>
+						</div>
+					) : null}
 					<textarea
 						name="quote"
 						cols="30"
@@ -40,11 +54,7 @@ function Quote() {
 						onChange={(e) => handleInput(e, setQuote)}
 					/>
 
-					{submit ? (
-						submit
-					) : (
-						<button type="submit">Post Quote</button>
-					)}
+					<button type="submit">Post Quote</button>
 				</form>
 			</div>
 		</>

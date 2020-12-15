@@ -45,7 +45,7 @@ const handleSubmit = (
 	e,
 	portfolio,
 	setPortfolio,
-	setSubmit,
+	setAlert,
 	setThumbnailProgress,
 	setCoverProgress
 ) => {
@@ -74,9 +74,10 @@ const handleSubmit = (
 				new Date().toLocaleDateString(),
 		})
 		.then(() => {
-			setSubmit(
-				<span className="success">Portfolio added successfully...</span>
-			);
+			setAlert({
+				status: true,
+				alert: "Portfolio added successfully...",
+			});
 			setPortfolio({
 				title: "",
 				heading: "",
@@ -92,7 +93,7 @@ const handleSubmit = (
 			setCoverProgress(0);
 		})
 		.catch(() => {
-			setSubmit(<span className="error">Opps an error accured...</span>);
+			setAlert({ status: false, alert: "Opps an error accured..." });
 		});
 };
 

@@ -23,7 +23,7 @@ function Portfolio() {
 		weburl: "",
 		description: "",
 	});
-	let [submit, setSubmit] = useState("");
+	let [alert, setAlert] = useState(null);
 
 	// Image Progress States
 	let [thumbnailProgress, setThumbnailProgress] = useState(0);
@@ -43,13 +43,29 @@ function Portfolio() {
 							e,
 							portfolio,
 							setPortfolio,
-							setSubmit,
+							setAlert,
 							setThumbnailProgress,
 							setCoverProgress
 						)
 					}
 				>
 					<h2>Add New Portfolio</h2>
+					{alert ? (
+						<div
+							className={`alert ${
+								alert.status ? "success" : "error"
+							}`}
+						>
+							<button
+								type="button"
+								className="close"
+								onClick={() => setAlert("")}
+							>
+								&times;
+							</button>
+							<strong>{alert.alert}</strong>
+						</div>
+					) : null}
 					<input
 						type="text"
 						name="title"
@@ -143,7 +159,7 @@ function Portfolio() {
 						value={portfolio.description}
 					></textarea>
 
-					{submit ? submit : <button type="submit">Publish</button>}
+					<button type="submit">Publish</button>
 				</form>
 			</div>
 		</>

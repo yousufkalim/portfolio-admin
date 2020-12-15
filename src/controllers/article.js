@@ -39,7 +39,7 @@ const handleInput = (e, setBlog) => {
 };
 
 // Handle Submit
-const handleSubmit = (e, blog, setBlog, setSubmit) => {
+const handleSubmit = (e, blog, setBlog, setProgress, setAlert) => {
 	e.preventDefault();
 
 	const link = "/blog/" + blog.title.split(" ").join("-").toLowerCase();
@@ -57,9 +57,8 @@ const handleSubmit = (e, blog, setBlog, setSubmit) => {
 				new Date().toLocaleDateString(),
 		})
 		.then(() => {
-			setSubmit(
-				<span className="success">Article posted successfully...</span>
-			);
+			setAlert({ status: true, alert: "Article posted successfully..." });
+			setProgress(0);
 			setBlog({
 				image: "",
 				title: "",
@@ -68,7 +67,7 @@ const handleSubmit = (e, blog, setBlog, setSubmit) => {
 			});
 		})
 		.catch(() => {
-			setSubmit(<span className="error">Opps an error accured...</span>);
+			setAlert({ status: false, alert: "Opps an error accured..." });
 		});
 };
 

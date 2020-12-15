@@ -12,7 +12,7 @@ const handleInput = (e, setQuote) => {
 };
 
 //Handle Submit
-const handleSubmit = (e, quote, setQuote, setSubmit) => {
+const handleSubmit = (e, quote, setQuote, setAlert) => {
 	e.preventDefault();
 
 	db.collection("quotes")
@@ -25,13 +25,17 @@ const handleSubmit = (e, quote, setQuote, setSubmit) => {
 				new Date().toLocaleDateString(),
 		})
 		.then(() => {
-			setSubmit(
-				<span className="success">Quote posted successfully...</span>
-			);
+			setAlert({
+				status: true,
+				alert: "Quote posted successfully...",
+			});
 			setQuote({ quote: "", author: "" });
 		})
 		.catch(() => {
-			setSubmit(<span className="error">Opps an error accured...</span>);
+			setAlert({
+				status: false,
+				alert: "Opps an error accured...",
+			});
 		});
 };
 
