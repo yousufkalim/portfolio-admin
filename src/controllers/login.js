@@ -12,15 +12,22 @@ const handleInput = (e, setLogin) => {
 };
 
 // Handle Submit
-const handleSubmit = (e, login, setErr) => {
+const handleSubmit = (e, login, setErr, setLoading) => {
 	e.preventDefault();
+	setLoading(true);
 
 	auth.signInWithEmailAndPassword(login.email, login.password)
 		.then(() => {
+			setLoading(false);
 			window.location = "/";
 		})
-		.catch(() => {
-			setErr("Email or password is incorrect");
+		.catch((error) => {
+			setLoading(false);
+			if (error.code === "auth/user-not-found") {
+				setErr("User not exist with this email...");
+			} else {
+				setErr("The password is invalid...");
+			}
 		});
 };
 
