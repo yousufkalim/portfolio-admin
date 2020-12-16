@@ -6,13 +6,14 @@ import { handleInput, handleSubmit } from "../controllers/login";
 function Login() {
 	//Initializing States
 	let [login, setLogin] = useState({ email: "", password: "" });
+	let [loading, setLoading] = useState(false);
 	let [err, setErr] = useState("");
 
 	// Component Render
 	return (
 		<div className="form-container">
 			<form
-				onSubmit={(e) => handleSubmit(e, login, setErr)}
+				onSubmit={(e) => handleSubmit(e, login, setErr, setLoading)}
 				style={{ width: "25%" }}
 			>
 				<h2>Login</h2>
@@ -45,7 +46,11 @@ function Login() {
 					onChange={(e) => handleInput(e, setLogin)}
 					required
 				/>
-				<button type="submit">Login</button>
+
+				<button type="submit" disabled={loading}>
+					{loading && <i className="fa fa-refresh fa-spin" />}
+					&nbsp;Login
+				</button>
 			</form>
 		</div>
 	);

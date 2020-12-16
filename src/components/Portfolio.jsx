@@ -24,6 +24,7 @@ function Portfolio() {
 		description: "",
 	});
 	let [alert, setAlert] = useState(null);
+	let [loading, setLoading] = useState(false);
 
 	// Image Progress States
 	let [thumbnailProgress, setThumbnailProgress] = useState(0);
@@ -45,7 +46,8 @@ function Portfolio() {
 							setPortfolio,
 							setAlert,
 							setThumbnailProgress,
-							setCoverProgress
+							setCoverProgress,
+							setLoading
 						)
 					}
 				>
@@ -72,6 +74,7 @@ function Portfolio() {
 						placeholder="Title"
 						value={portfolio.title}
 						onChange={(e) => handleInput(e, setPortfolio)}
+						autoFocus
 						required
 					/>
 					<input
@@ -97,7 +100,7 @@ function Portfolio() {
 							}
 							required
 						/>
-						<span class="file-custom"></span>
+						<span className="file-custom"></span>
 						<progress
 							value={thumbnailProgress}
 							max="100"
@@ -114,7 +117,7 @@ function Portfolio() {
 							}
 							required
 						/>
-						<span class="file-custom"></span>
+						<span className="file-custom"></span>
 						<progress value={coverProgress}></progress>
 					</label>
 					<input
@@ -159,7 +162,10 @@ function Portfolio() {
 						value={portfolio.description}
 					></textarea>
 
-					<button type="submit">Publish</button>
+					<button type="submit" disabled={loading}>
+						{loading && <i className="fa fa-refresh fa-spin" />}
+						&nbsp;Publish
+					</button>
 				</form>
 			</div>
 		</>

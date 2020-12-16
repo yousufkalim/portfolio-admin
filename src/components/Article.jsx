@@ -23,6 +23,7 @@ function Article() {
 		blog: "",
 	});
 	let [alert, setAlert] = useState(null);
+	let [loading, setLoading] = useState(false);
 
 	// Image Upload Progress State
 	let [progress, setProgress] = useState(0);
@@ -37,7 +38,14 @@ function Article() {
 			<div className="form-container post">
 				<form
 					onSubmit={(e) =>
-						handleSubmit(e, blog, setBlog, setProgress, setAlert)
+						handleSubmit(
+							e,
+							blog,
+							setBlog,
+							setProgress,
+							setAlert,
+							setLoading
+						)
 					}
 				>
 					<h2>Add New Post</h2>
@@ -67,7 +75,7 @@ function Article() {
 							}
 							required
 						/>
-						<span class="file-custom"></span>
+						<span className="file-custom"></span>
 						<progress value={progress} max="100"></progress>
 					</label>
 					<input
@@ -112,7 +120,10 @@ function Article() {
 						/>
 					</div>
 
-					<button type="submit">Publish</button>
+					<button type="submit" disabled={loading}>
+						{loading && <i className="fa fa-refresh fa-spin" />}
+						&nbsp;Publish
+					</button>
 				</form>
 			</div>
 		</>

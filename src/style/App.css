@@ -191,6 +191,17 @@ button:not(.close):hover {
 	cursor: pointer;
 }
 
+button:disabled {
+	opacity: 0.5;
+	transition: all 0.3s;
+}
+
+button:disabled:hover {
+	cursor: auto;
+	color: white;
+	background-color: #fa225a;
+}
+
 /* After Submit Alert */
 
 /* Alert */
@@ -200,6 +211,9 @@ button:not(.close):hover {
 	padding: 10px 20px;
 	border-radius: 4px;
 	position: relative;
+	font-family: "Source Sans Pro", sans-serif;
+	letter-spacing: 1px;
+	line-height: 25px;
 }
 
 .close {

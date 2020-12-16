@@ -39,8 +39,9 @@ const handleInput = (e, setBlog) => {
 };
 
 // Handle Submit
-const handleSubmit = (e, blog, setBlog, setProgress, setAlert) => {
+const handleSubmit = (e, blog, setBlog, setProgress, setAlert, setLoading) => {
 	e.preventDefault();
+	setLoading(true);
 
 	const link = "/blog/" + blog.title.split(" ").join("-").toLowerCase();
 
@@ -59,6 +60,7 @@ const handleSubmit = (e, blog, setBlog, setProgress, setAlert) => {
 		.then(() => {
 			setAlert({ status: true, alert: "Article posted successfully..." });
 			setProgress(0);
+			setLoading(false);
 			setBlog({
 				image: "",
 				title: "",
@@ -67,6 +69,7 @@ const handleSubmit = (e, blog, setBlog, setProgress, setAlert) => {
 			});
 		})
 		.catch(() => {
+			setLoading(false);
 			setAlert({ status: false, alert: "Opps an error accured..." });
 		});
 };

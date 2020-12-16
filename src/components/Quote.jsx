@@ -11,6 +11,7 @@ function Quote() {
 	//Initializing State
 	let [quote, setQuote] = useState({ quote: "", author: "" });
 	let [alert, setAlert] = useState(null);
+	let [loading, setLoading] = useState(false);
 
 	//Rendering Component
 	return (
@@ -19,7 +20,9 @@ function Quote() {
 
 			<div className="form-container quote">
 				<form
-					onSubmit={(e) => handleSubmit(e, quote, setQuote, setAlert)}
+					onSubmit={(e) =>
+						handleSubmit(e, quote, setQuote, setAlert, setLoading)
+					}
 				>
 					<h2>Add New Quote</h2>
 					{alert ? (
@@ -45,6 +48,8 @@ function Quote() {
 						placeholder="Quote"
 						onChange={(e) => handleInput(e, setQuote)}
 						value={quote.quote}
+						autoFocus
+						required
 					></textarea>
 					<input
 						type="text"
@@ -52,9 +57,13 @@ function Quote() {
 						placeholder="Author"
 						value={quote.author}
 						onChange={(e) => handleInput(e, setQuote)}
+						required
 					/>
 
-					<button type="submit">Post Quote</button>
+					<button type="submit" disabled={loading}>
+						{loading && <i className="fa fa-refresh fa-spin" />}
+						&nbsp;Post Quote
+					</button>
 				</form>
 			</div>
 		</>

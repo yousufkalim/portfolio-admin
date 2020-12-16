@@ -47,9 +47,11 @@ const handleSubmit = (
 	setPortfolio,
 	setAlert,
 	setThumbnailProgress,
-	setCoverProgress
+	setCoverProgress,
+	setLoading
 ) => {
 	e.preventDefault();
+	setLoading(true);
 
 	// Making Link
 	const link =
@@ -74,6 +76,7 @@ const handleSubmit = (
 				new Date().toLocaleDateString(),
 		})
 		.then(() => {
+			setLoading(false);
 			setAlert({
 				status: true,
 				alert: "Portfolio added successfully...",
@@ -93,6 +96,7 @@ const handleSubmit = (
 			setCoverProgress(0);
 		})
 		.catch(() => {
+			setLoading(false);
 			setAlert({ status: false, alert: "Opps an error accured..." });
 		});
 };
