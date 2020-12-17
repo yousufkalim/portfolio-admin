@@ -1,6 +1,6 @@
 /* Main */
 .portal {
-	height: 100vh;
+	height: 100%;
 	width: 100%;
 	overflow: hidden;
 	background-color: rgb(29, 32, 40);

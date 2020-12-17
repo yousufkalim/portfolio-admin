@@ -1,8 +1,3 @@
-/* Main */
-.portfolio {
-	margin-top: 65px;
-}
-
 /* Image Upload Content */
 .portal-thumbnail .file-custom::after {
 	content: "Choose a thumbnail image..." !important;
