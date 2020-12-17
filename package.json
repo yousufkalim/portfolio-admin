@@ -2,7 +2,6 @@
   "name": "kalim-portal",
   "version": "0.1.0",
   "private": true,
-  "proxy" : "http://localhost:5000",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^23.1.0",
     "@ckeditor/ckeditor5-ckfinder": "^23.1.0",
