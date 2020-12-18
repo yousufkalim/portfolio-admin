@@ -1,4 +1,4 @@
-# Getting Started with Portfolio
+# Getting Started with Portal
 
 This is the public version of my portfolio website's Portal \
 After a long time I made the source code of my personal website public. \
