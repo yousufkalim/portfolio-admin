@@ -1,5 +1,7 @@
 //Init
 import React, { useState } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 // Controller
 import { handleInput, handleSubmit } from "../controllers/portfolio";
@@ -152,15 +154,21 @@ function Portfolio() {
 						onChange={(e) => handleInput(e, setPortfolio)}
 						required
 					/>
-					<textarea
-						name="description"
-						cols="30"
-						rows="6"
-						placeholder="Description"
-						onChange={(e) => handleInput(e, setPortfolio)}
-						required
-						value={portfolio.description}
-					></textarea>
+					<div className="description-editor">
+						<CKEditor
+							editor={ClassicEditor}
+							data={portfolio.description}
+							onChange={(event, editor) => {
+								const data = editor.getData();
+								setPortfolio((prev) => {
+									return {
+										...prev,
+										description: data,
+									};
+								});
+							}}
+						/>
+					</div>
 
 					<button type="submit" disabled={loading}>
 						{loading && <i className="fa fa-refresh fa-spin" />}
