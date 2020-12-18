@@ -1,12 +1,6 @@
-//Init
 import React, { useState } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import axios from "axios";
 
-// Controller
-import { handleInput, handleSubmit } from "../controllers/portfolio";
-
-// Style
 import Nav from "./Nav";
 
 //Style
@@ -25,12 +19,61 @@ function Portfolio() {
 		weburl: "",
 		description: "",
 	});
-	let [alert, setAlert] = useState(null);
-	let [loading, setLoading] = useState(false);
+	let [submit, setSubmit] = useState("");
 
-	// Image Progress States
-	let [thumbnailProgress, setThumbnailProgress] = useState(0);
-	let [coverProgress, setCoverProgress] = useState(0);
+	//Handle Input
+	const handleInput = (e) => {
+		setPortfolio((prev) => {
+			if (e.target.name === "thumbnail" || e.target.name === "cover") {
+				return {
+					...prev,
+					[e.target.name]: e.target.files[0],
+				};
+			} else {
+				return {
+					...prev,
+					[e.target.name]: e.target.value,
+				};
+			}
+		});
+	};
+
+	//Handle Submit
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		const formData = new FormData();
+
+		for (const property in portfolio) {
+			formData.append(property, portfolio[property]);
+		}
+
+		axios
+			.post("/portfolio", formData)
+			.then(() => {
+				setSubmit(
+					<span className="success">
+						Portfolio added successfully...
+					</span>
+				);
+				setPortfolio({
+					title: "",
+					heading: "",
+					thumbnail: "",
+					cover: "",
+					skills: "",
+					category: "",
+					copyright: "",
+					weburl: "",
+					description: "",
+				});
+			})
+			.catch(() => {
+				setSubmit(
+					<span className="error">Opps an error accured...</span>
+				);
+			});
+	};
 
 	//Rendering Component
 	return (
@@ -40,43 +83,14 @@ function Portfolio() {
 
 			{/* Portfolio Form */}
 			<div className="form-container portfolio">
-				<form
-					onSubmit={(e) =>
-						handleSubmit(
-							e,
-							portfolio,
-							setPortfolio,
-							setAlert,
-							setThumbnailProgress,
-							setCoverProgress,
-							setLoading
-						)
-					}
-				>
+				<form onSubmit={handleSubmit}>
 					<h2>Add New Portfolio</h2>
-					{alert ? (
-						<div
-							className={`alert ${
-								alert.status ? "success" : "error"
-							}`}
-						>
-							<button
-								type="button"
-								className="close"
-								onClick={() => setAlert("")}
-							>
-								&times;
-							</button>
-							<strong>{alert.alert}</strong>
-						</div>
-					) : null}
 					<input
 						type="text"
 						name="title"
 						placeholder="Title"
 						value={portfolio.title}
-						onChange={(e) => handleInput(e, setPortfolio)}
-						autoFocus
+						onChange={handleInput}
 						required
 					/>
 					<input
@@ -84,50 +98,37 @@ function Portfolio() {
 						name="heading"
 						placeholder="Heading"
 						value={portfolio.heading}
-						onChange={(e) => handleInput(e, setPortfolio)}
+						onChange={handleInput}
 						required
 					/>
-					<label className="file portal-thumbnail">
+					<label class="file portal-thumbnail">
 						<input
 							type="file"
 							id="file"
 							name="thumbnail"
 							aria-label="File browser example"
-							onChange={(e) =>
-								handleInput(
-									e,
-									setPortfolio,
-									setThumbnailProgress
-								)
-							}
+							onChange={handleInput}
 							required
 						/>
-						<span className="file-custom"></span>
-						<progress
-							value={thumbnailProgress}
-							max="100"
-						></progress>
+						<span class="file-custom"></span>
 					</label>
-					<label className="file portal-cover">
+					<label class="file portal-cover">
 						<input
 							type="file"
 							id="file"
 							name="cover"
 							aria-label="File browser example"
-							onChange={(e) =>
-								handleInput(e, setPortfolio, setCoverProgress)
-							}
+							onChange={handleInput}
 							required
 						/>
-						<span className="file-custom"></span>
-						<progress value={coverProgress}></progress>
+						<span class="file-custom"></span>
 					</label>
 					<input
 						type="text"
 						name="skills"
 						placeholder="Skills"
 						value={portfolio.skills}
-						onChange={(e) => handleInput(e, setPortfolio)}
+						onChange={handleInput}
 						required
 					/>
 					<input
@@ -135,7 +136,7 @@ function Portfolio() {
 						name="category"
 						placeholder="Category"
 						value={portfolio.category}
-						onChange={(e) => handleInput(e, setPortfolio)}
+						onChange={handleInput}
 						required
 					/>
 					<input
@@ -143,7 +144,7 @@ function Portfolio() {
 						name="copyright"
 						placeholder="Copyright"
 						value={portfolio.copyright}
-						onChange={(e) => handleInput(e, setPortfolio)}
+						onChange={handleInput}
 						required
 					/>
 					<input
@@ -151,29 +152,20 @@ function Portfolio() {
 						name="weburl"
 						placeholder="Website URL"
 						value={portfolio.weburl}
-						onChange={(e) => handleInput(e, setPortfolio)}
+						onChange={handleInput}
 						required
 					/>
-					<div className="description-editor">
-						<CKEditor
-							editor={ClassicEditor}
-							data={portfolio.description}
-							onChange={(event, editor) => {
-								const data = editor.getData();
-								setPortfolio((prev) => {
-									return {
-										...prev,
-										description: data,
-									};
-								});
-							}}
-						/>
-					</div>
+					<textarea
+						name="description"
+						cols="30"
+						rows="6"
+						placeholder="Description"
+						onChange={handleInput}
+						required
+						value={portfolio.description}
+					></textarea>
 
-					<button type="submit" disabled={loading}>
-						{loading && <i className="fa fa-refresh fa-spin" />}
-						&nbsp;Publish
-					</button>
+					{submit ? submit : <button type="submit">Publish</button>}
 				</form>
 			</div>
 		</>

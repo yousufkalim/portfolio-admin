@@ -8,21 +8,21 @@ Last updated on 18-Dec-2020
 
 This portal is built in React. \
 This portal is linked with [Portfolio](https://github.com/yousufkalim/react-portfolio) website. \
-I used firebase with these two projects. \
-If you want to use your own back-end, Then please see the "node-backEnd" branch of this repo. \
-You need to understand that how these two projects are communicating with each other using firebase.
+I used nodejs with this project. \
+If you want to use firebase, Then please see the "master" branch of this repo.
 
 ## Prerequisites
 
 **Step 1**
 
-Go to src/firebase.js \
-Add the configuration of your firebase Portal project, So we can use firebase as back-end for authentication and database etc.
+First of all go to [Portfolio-API](https://github.com/yousufkalim/portfolio-api) and set it up on your local server. \
+Add the configuration of your database, So we can use database for authentication and data etc. \
+Run the node server that you setted up.
 
-**If you want to use your own back-end then you don't need first step**
+**If you want to use firebase as back-end then you don't need first step**
 
-Just clone the "node-backEnd" branch of this repo. \
-And configure it with your custom back-end.
+Just clone the "master" branch of this repo. \
+And configure it with your firebase project.
 
 ## Initialize the Project
 

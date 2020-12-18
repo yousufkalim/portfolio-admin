@@ -1,9 +1,9 @@
 /* Input file custom text */
 .file-custom:after {
 	content: "Choose a featured image...";
-	font-size: 17px;
+	font-size: 18px;
 	font-family: "Source Sans Pro", sans-serif;
-	color: darkgray;
+	color: #555c6e;
 	font-weight: normal;
 }
 

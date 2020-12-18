@@ -1,0 +1,30 @@
+/* Error Alert */
+.alert {
+	width: 100%;
+	border: 1px solid #f6c7c4;
+	color: #741d17;
+	background-color: #f9d7d5;
+	margin: 10px 0 5px 0;
+	padding: 10px 20px;
+	border-radius: 4px;
+	position: relative;
+}
+
+.close {
+	position: absolute;
+	font-size: 1.5rem;
+	border: none;
+	background-color: transparent;
+	top: 50%;
+	right: 0;
+	z-index: 2;
+	padding: 0.75rem 1.25rem;
+	color: grey;
+	transform: translateY(-47%);
+	outline: none;
+}
+
+.close:hover {
+	color: inherit;
+	cursor: pointer;
+}

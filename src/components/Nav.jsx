@@ -1,9 +1,7 @@
 //Init
 import React from "react";
 import { Link } from "react-router-dom";
-
-// Firebase
-import { auth } from "../firebase";
+import axios from "axios";
 
 //Style
 import "../style/Nav.css";
@@ -11,9 +9,11 @@ import "../style/Nav.css";
 // Portal Nav Component
 function Nav() {
 	const handleLogout = () => {
-		auth.signOut()
-			.then(() => (window.location = "/login"))
-			.catch((err) => console.log(err));
+		axios.get("/logout").then((res) => {
+			if (!res.data.success) {
+				window.location = "/login";
+			}
+		});
 	};
 
 	// Render
@@ -25,7 +25,7 @@ function Nav() {
 				</Link>
 			</div>
 			<div className="logout" onClick={handleLogout}>
-				<i className="logout-icon fas fa-power-off"></i>
+				<i class="logout-icon fas fa-power-off"></i>
 			</div>
 		</nav>
 	);

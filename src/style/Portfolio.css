@@ -1,27 +1,21 @@
+/* Main */
+.portfolio {
+	margin-top: 65px;
+}
+
 /* Image Upload Content */
 .portal-thumbnail .file-custom::after {
 	content: "Choose a thumbnail image..." !important;
-	font-size: 17px;
+	font-size: 18px;
 	font-family: "Source Sans Pro", sans-serif;
-	color: darkgray;
+	color: #555c6e;
 	font-weight: normal;
 }
 
 .portal-cover .file-custom::after {
 	content: "Choose a cover image..." !important;
-	font-size: 17px;
+	font-size: 18px;
 	font-family: "Source Sans Pro", sans-serif;
-	color: darkgray;
+	color: #555c6e;
 	font-weight: normal;
-}
-
-/* Description */
-.portfolio form .description-editor {
-	margin: 10px 0;
-	width: 100%;
-}
-
-.description-editor .ck-editor .ck-content {
-	min-height: 170px;
-	font-family: "Source Sans Pro", sans-serif;
 }

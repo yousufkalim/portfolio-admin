@@ -1,11 +1,8 @@
 //Init
 import React, { useState } from "react";
+import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-//Controllers
-import { handleImage, handleInput, handleSubmit } from "../controllers/article";
-import MyUploadAdapter from "../controllers/MyUploadAdapter";
 
 //Nav
 import Nav from "./Nav";
@@ -22,11 +19,58 @@ function Article() {
 		description: "",
 		blog: "",
 	});
-	let [alert, setAlert] = useState(null);
-	let [loading, setLoading] = useState(false);
+	let [submit, setSubmit] = useState("");
 
-	// Image Upload Progress State
-	let [progress, setProgress] = useState(0);
+	//Handle Image Input
+	const handleImage = (e) => {
+		setBlog((prev) => {
+			return {
+				...prev,
+				image: e.target.files[0],
+			};
+		});
+	};
+
+	// Handle Text Input
+	const handleInput = (e) => {
+		setBlog((prev) => {
+			return {
+				...prev,
+				[e.target.name]: e.target.value,
+			};
+		});
+	};
+
+	// Handle Submit
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const formData = new FormData();
+
+		for (const property in blog) {
+			formData.append(property, blog[property]);
+		}
+
+		axios
+			.post("/blog", formData)
+			.then(() => {
+				setSubmit(
+					<span className="success">
+						Article posted successfully...
+					</span>
+				);
+				setBlog({
+					image: "",
+					title: "",
+					description: "",
+					blog: "",
+				});
+			})
+			.catch(() => {
+				setSubmit(
+					<span className="error">Opps an error accured...</span>
+				);
+			});
+	};
 
 	// Return Component
 	return (
@@ -36,47 +80,17 @@ function Article() {
 
 			{/* Post Form */}
 			<div className="form-container post">
-				<form
-					onSubmit={(e) =>
-						handleSubmit(
-							e,
-							blog,
-							setBlog,
-							setProgress,
-							setAlert,
-							setLoading
-						)
-					}
-				>
+				<form onSubmit={handleSubmit}>
 					<h2>Add New Post</h2>
-					{alert ? (
-						<div
-							className={`alert ${
-								alert.status ? "success" : "error"
-							}`}
-						>
-							<button
-								type="button"
-								className="close"
-								onClick={() => setAlert("")}
-							>
-								&times;
-							</button>
-							<strong>{alert.alert}</strong>
-						</div>
-					) : null}
-					<label className="file">
+					<label class="file">
 						<input
 							type="file"
 							id="file"
 							aria-label="File browser example"
-							onChange={(e) =>
-								handleImage(e, setBlog, setProgress)
-							}
+							onChange={handleImage}
 							required
 						/>
-						<span className="file-custom"></span>
-						<progress value={progress} max="100"></progress>
+						<span class="file-custom"></span>
 					</label>
 					<input
 						type="text"
@@ -84,7 +98,7 @@ function Article() {
 						name="title"
 						placeholder="Title"
 						value={blog.title}
-						onChange={(e) => handleInput(e, setBlog)}
+						onChange={handleInput}
 						required
 					/>
 					<textarea
@@ -92,22 +106,21 @@ function Article() {
 						cols="30"
 						rows="3"
 						placeholder="Description"
-						onChange={(e) => handleInput(e, setBlog)}
+						onChange={handleInput}
 						value={blog.description}
 					></textarea>
 
 					{/* Ck Editor */}
 					<div className="post-editor">
 						<CKEditor
+							config={{
+								ckfinder: {
+									// Upload the images to the server using the CKFinder QuickUpload command.
+									uploadUrl: "/blog/article-image",
+								},
+							}}
 							editor={ClassicEditor}
 							data={blog.blog}
-							onReady={(editor) => {
-								editor.plugins.get(
-									"FileRepository"
-								).createUploadAdapter = (loader) => {
-									return new MyUploadAdapter(loader);
-								};
-							}}
 							onChange={(event, editor) => {
 								const data = editor.getData();
 								setBlog((prev) => {
@@ -120,10 +133,7 @@ function Article() {
 						/>
 					</div>
 
-					<button type="submit" disabled={loading}>
-						{loading && <i className="fa fa-refresh fa-spin" />}
-						&nbsp;Publish
-					</button>
+					{submit ? submit : <button type="submit">Publish</button>}
 				</form>
 			</div>
 		</>
